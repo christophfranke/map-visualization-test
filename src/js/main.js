@@ -1,5 +1,6 @@
 import Highcharts from  'highcharts/highmaps'
 import map from '@highcharts/map-collection/custom/world.geo.json'
+import data from '../data/set1.json'
 // console.log(map.features.map(feature => feature.id))
 
 window.addEventListener('load', () => {

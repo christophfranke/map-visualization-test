@@ -7,6 +7,8 @@ const mila = require('markdown-it-link-attributes')
 const webpack = require('webpack')
 const path = require('path')
 const yargs = require('yargs')
+const csv = require('csv-parse')
+const fs = require('fs')
 
 md.use(mila, {
   attrs: {
@@ -42,7 +44,24 @@ const config = {
   },
 }
 
-gulp.task('js', () => {
+gulp.task('csv', () => {
+  return new Promise(resolve => {
+    const results = []
+    // gulp.src('src/data/**/*')
+    fs.createReadStream('src/data/set1.csv')
+      .pipe(csv())
+      .on('data', data => {
+        results.push(data)
+      })
+      .on('end', () => {
+        fs.writeFile('src/data/set1.json', JSON.stringify(results), 'utf8', () => {
+          resolve()
+        })
+      })
+  })
+})
+
+gulp.task('js', ['csv'], () => {
   return new Promise(resolve => webpack(config, (err, stats) => {
     if (err) {
 			console.log('Webpack', err)    	
@@ -98,8 +117,9 @@ gulp.task('serve', () => {
 gulp.task('build', ['pug', 'js', 'sass', 'static'])
 
 gulp.task('watch', ['serve'], () => {
-	gulp.watch('src/pages/**/*.pug', ['pug'])
-	gulp.watch('src/js/**/*.js', ['js'])
+  gulp.watch('src/pages/**/*.pug', ['pug'])
+  gulp.watch('src/js/**/*.js', ['js'])
+	gulp.watch('src/data/**/*.csv', ['js'])
 	gulp.watch('src/content/**/*.md', ['pug'])
 	gulp.watch('src/sass/**/*.scss', ['sass'])
 	gulp.watch('src/static/**/*', ['static'])
