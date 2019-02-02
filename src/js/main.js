@@ -50,8 +50,8 @@ window.addEventListener('load', () => {
     colorAxis: {
       min: 1,
       max,
-      minColor: '#d8efff',
-      maxColor: '#1f217f',
+      minColor: '#f7f7f7',
+      maxColor: '#e1000f',
       // type: 'logarithmic'
     },
 	})
