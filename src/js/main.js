@@ -12,18 +12,22 @@ window.addEventListener('load', () => {
 
 	const data = set1.map(([key, value]) => ({
 		'hc-key': key.toLowerCase(),
-		value
+		value: value > 0 ? value : null
 	}))
 
 	const max = data.map(point => point.value).reduce((max, value) => Math.max(max, value), 0)
 
 	Highcharts.mapChart('container', {
+		title: {
+			text: 'Number of patents per country',
+		},
+
     series: [{
       data,
       mapData: map,
       joinBy: 'hc-key',
-      allAreas: false,
-      name: 'Random data',
+      allAreas: true,
+      name: 'Number of patents',
       states: {
         hover: {
           color: '#a4edba'
@@ -32,7 +36,8 @@ window.addEventListener('load', () => {
       dataLabels: {
         enabled: true,
         format: '{point.name}'
-      }
+      },
+      nullColor: '#e0e0e5'
     }],
     
     mapNavigation: {
@@ -43,8 +48,11 @@ window.addEventListener('load', () => {
     },
 
     colorAxis: {
-      min: 0,
-      max
+      min: 1,
+      max,
+      minColor: '#d8efff',
+      maxColor: '#1f217f',
+      // type: 'logarithmic'
     },
 	})
 })
